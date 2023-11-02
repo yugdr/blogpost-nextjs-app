@@ -1,0 +1,79 @@
+"use client";
+
+import { Fragment } from "react";
+import { Formik, Form, FormikHelpers, FormikProps } from "formik";
+import * as Yup from "yup";
+
+import Input from "./Input";
+
+const CommentsForm = () => {
+  const postComment = async (values) => {
+    try {
+      const response = await fetch(
+        "https://f80e3829-e307-4f7e-895d-a0c8891a4d7f.mock.pstmn.io/email-unsubscribe",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error("request failed!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleSubmit = (values, actions) => {
+    // console.log(values);
+  };
+  return (
+    <Fragment>
+      <Formik
+        initialValues={{}}
+        validationSchema={Yup.object({
+          name: Yup.string().required("Required"),
+          email: Yup.string()
+            .email("Invalid email address")
+            .required("Required"),
+          body: Yup.string().required("Required"),
+        })}
+        onSubmit={handleSubmit}
+      >
+        {(props) => (
+          <>
+            <h3>Add a New Comment</h3>
+            <Form className="form">
+              <Input
+                type="text"
+                name="name"
+                placeholder="Name"
+                className="input__name"
+              />
+              <Input
+                type="email"
+                name="email"
+                placeholder="E-Mail"
+                className="input__email"
+              />
+              <Input
+                type="text"
+                name="body"
+                placeholder="Body"
+                className="input__body"
+              />
+              <div className="button__wrapper">
+                <button type="submit">Submit</button>
+              </div>
+            </Form>
+          </>
+        )}
+      </Formik>
+    </Fragment>
+  );
+};
+
+export default CommentsForm;

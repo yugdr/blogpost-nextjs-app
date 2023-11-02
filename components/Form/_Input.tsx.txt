@@ -1,0 +1,23 @@
+import React from "react";
+import { useField } from "formik";
+
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  className?: string;
+  name: string;
+}
+
+const Input: React.FC<InputProps> = ({ className, ...props }) => {
+  const [field, meta] = useField(props);
+
+  return (
+    <>
+      <input
+        {...field}
+        {...props}
+        className={`${className} ${meta.error ? "input-error" : ""}`}
+      />
+    </>
+  );
+};
+
+export default Input;
